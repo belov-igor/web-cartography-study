@@ -97,7 +97,7 @@ map.on("load", () => {
             </div><hr>`;
           });
 
-          map.on('moveend', () => {
+          map.on('idle', () => {
             const features = map.queryRenderedFeatures({
               layers: ["clusters"]
             });
