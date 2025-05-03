@@ -56,7 +56,6 @@ map.on("load", () => {
             source: "vacancies",
             type: "circle",
             paint: {
-            //   "circle-color": "#00FA9A",
               "circle-stroke-width": 2,
               "circle-stroke-color": "#FFFFFF",
               "circle-radius": [
@@ -73,9 +72,22 @@ map.on("load", () => {
                 3,  // --- первое граничное значение
                 "#4682B4", // от 3 точек до 6
                 6,  // --- второе граничное значение
-                "#7B68EE"  // больше 6 точек в кластере
-              ],
+                "#7B68EE",  // больше 6 точек в кластере
+              ], 
             },
+          });
+
+          map.addLayer({
+            id: "unclustered-points",
+            type: "circle",
+            source: "vacancies",
+            filter: ["!", ["has", "point_count"]],
+            paint: {
+              "circle-radius": 5,
+              "circle-color": "#8B4513",
+              "circle-stroke-width": 1,
+              "circle-stroke-color": "#ffffff"
+            }
           });
         
           map.addLayer({
