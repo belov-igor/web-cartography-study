@@ -13,6 +13,15 @@
 <body>
     <a href="../" class="back-link">← На главную</a>
     <div id="map"></div>
+    <dialog id="city-details-modal" onmousedown="this.close()"></dialog>
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <p style="font-size: 14px; color: #3366cc; margin: 0;">Выберите год:</p>
+    <select id="year-selector">
+      <option value="2020" selected>2020</option>
+      <option value="2019">2019</option>
+      <option value="2018">2018</option>
+    </select>
+  </div>
     <script src="main.js"></script>
 </body>
 

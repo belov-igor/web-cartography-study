@@ -8,8 +8,8 @@ app = Flask(__name__)
 
 DB_LOCATION = "cities_index.sqlite"
 
-...
-@app.route("/lesson3/cities/<year>") # путь API, к которому обращается пользователь
+
+@app.route("/cities/<year>") # путь API, к которому обращается пользователь
 def cities_by_year(year): # функция, которая будет выполняться при обращении
     # start_time = time.time()
     db = sqlite3.connect(DB_LOCATION) # подключение к базе данных
@@ -34,9 +34,27 @@ def cities_by_year(year): # функция, которая будет выпол
     }
     r = Response( # формируем ответ
         json.dumps(geojson, ensure_ascii=False), # ensure_ascii=False, чтобы нормально отображалась кириллица
-        mimetype="application/json" # указываем тип данных
+        mimetype="application/json", # указываем тип данных
+        headers={"Access-Control-Allow-Origin": "*"}
     )
     # print("--- %s seconds ---" % (time.time() - start_time))
+    return r
+
+@app.route("/city/<id>")
+def city_by_id(id):
+    start_time = time.time()
+    db = sqlite3.connect(DB_LOCATION)
+    db.row_factory = sqlite3.Row
+    cursor = db.execute("SELECT * FROM cities WHERE id = ?", (id,))
+    city = cursor.fetchone()
+    cursor.close()
+    db.close()
+    r = Response(
+        json.dumps(dict(city), ensure_ascii=False),
+        mimetype="application/json",
+        headers={"Access-Control-Allow-Origin": "*"}
+    )
+    print("--- %s seconds ---" % (time.time() - start_time))
     return r
 
 if __name__ == "__main__":

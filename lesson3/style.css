@@ -4,10 +4,17 @@
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: -1;
 }
 
-.maplibregl-popup-content {
-    border-radius: 10px;  
+#year-selector {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #3366cc;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
 
 /* стрелка назад */
