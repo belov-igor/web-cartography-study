@@ -29,6 +29,28 @@ map.on("load", () => {
           "fill-opacity": 0.3,
         },
     });
+
+    fetch(`${API_BASE_URL}/years`)
+        .then(response => response.json())
+        .then(years => {
+            const select = document.getElementById('year-selector');
+            select.innerHTML = '';
+
+            years.forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                select.appendChild(option);
+            });
+
+            // Установить первый год и обновить слой
+            if (years.length > 0) {
+                const initialYear = years[0];
+                select.value = initialYear;
+                map.getSource('cities').setData(`${API_BASE_URL}/cities/${initialYear}`);
+            }
+        })
+        .catch(error => console.error("Ошибка загрузки годов:", error));
     
     map.addSource('cities', {
         type: 'geojson',
@@ -90,10 +112,14 @@ map.on("load", () => {
                             <h3>Социально-досуговая инфраструктура</h3><h2>${cityProperties.social_points} / 60</h2>
                             <h3>Улично-дорожная</h3><h2>${cityProperties.street_points} / 60</h2>
                             <h3>Общегородское пространство</h3><h2>${cityProperties.common_points} / 60</h2>`
-                document.getElementById("city-details-modal").showModal() // showModal() -- встроенный метод элемента <dialog>
+                document.getElementById("city-details-modal").show() // showModal() -- встроенный метод элемента <dialog>
             })
     })
 
+    map.on("click", "cities-layer", function (e) {
+        map.flyTo({ center: e.lngLat, zoom: 6 });
+    });
+    
     map.on('mouseenter', 'cities-layer', () => {
         map.getCanvas().style.cursor = 'pointer';
     });

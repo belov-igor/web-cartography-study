@@ -1,7 +1,7 @@
 from flask import Flask, Response
 import sqlite3
 import json
-import time
+# import time
 
 
 app = Flask(__name__)
@@ -55,6 +55,20 @@ def city_by_id(id):
         headers={"Access-Control-Allow-Origin": "*"}
     )
     # print("--- %s seconds ---" % (time.time() - start_time))
+    return r
+
+@app.route("/years")
+def available_years():
+    db = sqlite3.connect(DB_LOCATION)
+    cursor = db.execute("SELECT DISTINCT year FROM cities ORDER BY year DESC")
+    years = [int(row[0]) for row in cursor.fetchall()]
+    cursor.close()
+    db.close()
+    r = Response(
+        json.dumps(list(years), ensure_ascii=False),
+        mimetype="application/json",
+        headers={"Access-Control-Allow-Origin": "*"}
+    )
     return r
 
 if __name__ == "__main__":

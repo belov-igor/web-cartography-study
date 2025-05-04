@@ -17,6 +17,22 @@
     cursor: pointer;
 }
 
+/* Модальное окно */
+#city-details-modal {
+    position: fixed;         
+    left: 20px;
+    top: 10px;
+    width: 300px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 20px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    background: white;
+    z-index: 1000;
+}
+
 /* стрелка назад */
 .back-link {
     position: absolute;
