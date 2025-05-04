@@ -42,7 +42,7 @@ def cities_by_year(year): # функция, которая будет выпол
 
 @app.route("/city/<id>")
 def city_by_id(id):
-    start_time = time.time()
+    # start_time = time.time()
     db = sqlite3.connect(DB_LOCATION)
     db.row_factory = sqlite3.Row
     cursor = db.execute("SELECT * FROM cities WHERE id = ?", (id,))
@@ -54,8 +54,8 @@ def city_by_id(id):
         mimetype="application/json",
         headers={"Access-Control-Allow-Origin": "*"}
     )
-    print("--- %s seconds ---" % (time.time() - start_time))
+    # print("--- %s seconds ---" % (time.time() - start_time))
     return r
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

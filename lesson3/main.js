@@ -1,3 +1,10 @@
+const isLocalhost = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+
+const API_BASE_URL = isLocalhost
+  ? 'http://127.0.0.1:5000' // Local backend
+  : 'https://bisgarik.pythonanywhere.com'; // Deployed backend
+
+
 const map = new maplibregl.Map({
     container: 'map',
     style: "https://raw.githubusercontent.com/gtitov/basemaps/refs/heads/master/positron-nolabels.json",
@@ -25,7 +32,7 @@ map.on("load", () => {
     
     map.addSource('cities', {
         type: 'geojson',
-        data: "http://127.0.0.1:5000/cities/2020" // бэкенд должен быть запущен
+        data: `${API_BASE_URL}/cities/2020` // бэкенд должен быть запущен
     });
 
     map.addLayer({
@@ -62,13 +69,13 @@ map.on("load", () => {
         'change',
         (e) => {
             const year = e.target.value // фиксируем выбранный год
-            map.getSource('cities').setData(`http://127.0.0.1:5000/cities/${year}`) // меняем источник данных
+            map.getSource('cities').setData(`${API_BASE_URL}/cities/${year}`) // меняем источник данных
         }
     )
 
     map.on('click', 'cities-layer', (e) => {
         // console.log(e.features[0].properties.id)
-        fetch(`http://127.0.0.1:5000/city/${e.features[0].properties.id}`)
+        fetch(`${API_BASE_URL}/city/${e.features[0].properties.id}`)
             .then(response => response.json())
             .then(cityProperties => {
                 // console.log(cityProperties)
