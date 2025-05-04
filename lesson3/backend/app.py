@@ -27,7 +27,12 @@ def cities_by_year(year): # функция, которая будет выпол
                     "type": "Point",
                     "coordinates": [row["longitude"], row["latitude"]],
                 },
-                "properties": dict(row),
+                "properties": {
+                    "id": row["id"],
+                    "name": row["name"],
+                    "group_name": row["group_name"],
+                    "total_points": row["total_points"]
+                },
             }
             for row in cities
         ],

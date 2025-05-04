@@ -96,7 +96,7 @@ map.on("load", () => {
     )
 
     map.on('click', 'cities-layer', (e) => {
-        // console.log(e.features[0].properties.id)
+        console.log(e.features[0].properties.id)
         fetch(`${API_BASE_URL}/city/${e.features[0].properties.id}`)
             .then(response => response.json())
             .then(cityProperties => {
@@ -112,7 +112,7 @@ map.on("load", () => {
                             <h3>Социально-досуговая инфраструктура</h3><h2>${cityProperties.social_points} / 60</h2>
                             <h3>Улично-дорожная</h3><h2>${cityProperties.street_points} / 60</h2>
                             <h3>Общегородское пространство</h3><h2>${cityProperties.common_points} / 60</h2>`
-                document.getElementById("city-details-modal").show() // showModal() -- встроенный метод элемента <dialog>
+                document.getElementById("city-details-modal").showModal() // showModal() -- встроенный метод элемента <dialog>
             })
     })
 
