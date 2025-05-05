@@ -1,9 +1,9 @@
+let selectedCityId = null;
 const isLocalhost = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
 
 const API_BASE_URL = isLocalhost
   ? 'http://127.0.0.1:5000' // Local backend
   : 'https://bisgarik.pythonanywhere.com'; // Deployed backend
-
 
 const map = new maplibregl.Map({
     container: 'map',
@@ -12,6 +12,24 @@ const map = new maplibregl.Map({
     zoom: 3, 
     // hash: true
 });
+
+// Генерация панели с информацией о городе
+function renderCityDetails(cityProperties) {
+    const modal = document.getElementById("city-details-modal");
+    modal.innerHTML = `
+        <h1 style="text-align: center">${cityProperties.name}</h1>
+        <img src="${cityProperties.emblem_url}" height="200" style="display: block; margin: 0 auto;">
+        <h3>Численность населения</h3><h2>${cityProperties.people_count} тыс. чел</h2>
+        <h3>Индекс качества городской среды</h3><h2>${cityProperties.total_points} / 360</h2>
+        <hr>
+        <h3>Жилье и прилегающие пространства</h3><h2>${cityProperties.house_points} / 60</h2>
+        <h3>Озелененные пространства</h3><h2>${cityProperties.park_points} / 60</h2>
+        <h3>Общественно-деловая инфраструктура</h3><h2>${cityProperties.business_points} / 60</h2>
+        <h3>Социально-досуговая инфраструктура</h3><h2>${cityProperties.social_points} / 60</h2>
+        <h3>Улично-дорожная</h3><h2>${cityProperties.street_points} / 60</h2>
+        <h3>Общегородское пространство</h3><h2>${cityProperties.common_points} / 60</h2>
+    `;
+}
 
 map.on("load", () => {
     
@@ -90,32 +108,28 @@ map.on("load", () => {
     document.getElementById("year-selector").addEventListener(
         'change',
         (e) => {
-            const year = e.target.value // фиксируем выбранный год
-            map.getSource('cities').setData(`${API_BASE_URL}/cities/${year}`) // меняем источник данных
+            const year = e.target.value;
+            map.getSource('cities').setData(`${API_BASE_URL}/cities/${year}`);
+    
+            // Скрываем модалку и сбрасываем выбранный город
+            const modal = document.getElementById("city-details-modal");
+            modal.style.display = "none";
+            selectedCityId = null;
         }
-    )
+    );
 
     map.on('click', 'cities-layer', (e) => {
         // console.log(e.features[0].properties.id)
-        fetch(`${API_BASE_URL}/city/${e.features[0].properties.id}`)
+        selectedCityId = e.features[0].properties.id;
+        fetch(`${API_BASE_URL}/city/${selectedCityId}`)
             .then(response => response.json())
             .then(cityProperties => {
                 // console.log(cityProperties)
-                document.getElementById("city-details-modal").innerHTML = `<h1>${cityProperties.name}</h1>
-                            <img src="${cityProperties.emblem_url}" height="200">
-                            <h3>Численность населения</h3><h2>${cityProperties.people_count} тыс. чел</h2>
-                            <h3>Индекс качества городской среды</h3><h2>${cityProperties.total_points} / 360</h2>
-                            <hr>
-                            <h3>Жилье и прилегающие пространства</h3><h2>${cityProperties.house_points} / 60</h2>
-                            <h3>Озелененные пространства</h3><h2>${cityProperties.park_points} / 60</h2>
-                            <h3>Общественно-деловая инфраструктура</h3><h2>${cityProperties.business_points} / 60</h2>
-                            <h3>Социально-досуговая инфраструктура</h3><h2>${cityProperties.social_points} / 60</h2>
-                            <h3>Улично-дорожная</h3><h2>${cityProperties.street_points} / 60</h2>
-                            <h3>Общегородское пространство</h3><h2>${cityProperties.common_points} / 60</h2>`
+                renderCityDetails(cityProperties);
                 document.getElementById("city-details-modal").style.display = "block"; // замена встроенному модальному окну
                 // document.getElementById("city-details-modal").showModal(); // showModal() -- встроенный метод элемента <dialog>, заменено
             })
-    })
+    });
 
     map.on("click", "cities-layer", function (e) {
         map.flyTo({ center: e.lngLat, zoom: 6 });
