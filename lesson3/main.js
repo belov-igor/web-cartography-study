@@ -96,7 +96,7 @@ map.on("load", () => {
     )
 
     map.on('click', 'cities-layer', (e) => {
-        console.log(e.features[0].properties.id)
+        // console.log(e.features[0].properties.id)
         fetch(`${API_BASE_URL}/city/${e.features[0].properties.id}`)
             .then(response => response.json())
             .then(cityProperties => {
@@ -112,13 +112,26 @@ map.on("load", () => {
                             <h3>Социально-досуговая инфраструктура</h3><h2>${cityProperties.social_points} / 60</h2>
                             <h3>Улично-дорожная</h3><h2>${cityProperties.street_points} / 60</h2>
                             <h3>Общегородское пространство</h3><h2>${cityProperties.common_points} / 60</h2>`
-                document.getElementById("city-details-modal").showModal() // showModal() -- встроенный метод элемента <dialog>
+                document.getElementById("city-details-modal").style.display = "block"; // замена встроенному модальному окну
+                // document.getElementById("city-details-modal").showModal(); // showModal() -- встроенный метод элемента <dialog>, заменено
             })
     })
 
     map.on("click", "cities-layer", function (e) {
         map.flyTo({ center: e.lngLat, zoom: 6 });
     });
+
+    // Закрытие модального окна при клике вне города
+    map.on('click', (e) => {
+        const features = map.queryRenderedFeatures(e.point, {
+            layers: ['cities-layer']
+        });
+
+        if (features.length === 0) {
+            const modal = document.getElementById("city-details-modal");
+            modal.style.display = "none";
+        }
+});
     
     map.on('mouseenter', 'cities-layer', () => {
         map.getCanvas().style.cursor = 'pointer';
