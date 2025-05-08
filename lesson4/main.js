@@ -17,6 +17,7 @@ const map = new maplibregl.Map({
 map.on("load", () => {
 
     let hoveredOikonymId = null;
+    let hoveredFeatureId = null;
     
     map.addSource("russia-boundary", {
         type: "geojson",
@@ -96,9 +97,7 @@ map.on("load", () => {
             },
             minzoom: 9
         })
-
-        let hoveredFeatureId = null;
-
+        
         map.on("mousemove", "grid-layer", (e) => {
             if (hoveredFeatureId !== null) {
                 // последнему назначенному объекту
@@ -220,7 +219,7 @@ map.on("load", () => {
 
         // Фильтрация по первой букве
         document.getElementById("letter-filter").addEventListener("input", (e) => {
-            const letter = e.target.value.toUpperCase();
+            const letter = e.target.value.toLowerCase();
             if (letter.length === 0) {
                 map.setFilter("oikonyms-layer", null); // сброс фильтра
             } else {
