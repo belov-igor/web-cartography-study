@@ -39,14 +39,15 @@
     top: 10px;
     right: 10px;
     background: white;
-    padding: 6px 10px;
+    padding: 4px 8px;
     border-radius: 4px;
     font-size: 14px;
     color: #3366cc;
     text-decoration: none;
     z-index: 999;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-.back-link:hover {
-    text-decoration: underline;
+    display: flex;
+    align-items: center;
+    height: 24px;
+    line-height: 1;
 }

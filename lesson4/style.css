@@ -1,0 +1,89 @@
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+}
+
+/*  */
+/* #population-filter {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #3366cc;
+    border: none;
+    top: 10px;
+    left: 10px;
+    background: white;
+    z-index: 999;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+} */
+/* #population-filter label {
+    font-weight: bold;
+    margin-right: 8px;
+    color: #333;
+}
+
+#population-filter input[type="number"] {
+    padding: 4px 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#population-filter input[type="number"]:focus {
+    border-color: #3366cc;
+} */
+#population-filter {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #3366cc;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    height: 24px; 
+    gap: 8px;
+}
+
+#population-filter input[type="number"] {
+    padding: 4px 6px;
+    font-size: 12px;
+    border: 1px solid #3366cc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#population-filter input[type="number"]:focus {
+    border-color: #003399;
+}
+
+
+/* Стрелка назад */
+.back-link {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #3366cc;
+    text-decoration: none;
+    z-index: 999;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    height: 24px;
+    line-height: 1;
+}
