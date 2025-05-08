@@ -97,7 +97,18 @@ map.on("load", () => {
             },
             minzoom: 9
         })
+
+        // ВОТ ТУТ ФОРМИРУЕМ СПИСОК ОЙКОНИМОВ
+        map.once("idle", () => {
+            allOikonyms = map.querySourceFeatures("oikonyms", {
+              sourceLayer: "oikonyms"
+            }).filter(f => {
+              const name = f.properties.name || "";
+              return name.trim().split(/\s+/).length >= 1;
+            });
+        });
         
+        // lmfgblf
         map.on("mousemove", "grid-layer", (e) => {
             if (hoveredFeatureId !== null) {
                 // последнему назначенному объекту
@@ -218,16 +229,35 @@ map.on("load", () => {
         });
 
         // Фильтрация по первой букве
+        // document.getElementById("letter-filter").addEventListener("input", (e) => {
+        //     const letter = e.target.value.toLowerCase();
+        //     if (letter.length === 0) {
+        //         map.setFilter("oikonyms-layer", null); // сброс фильтра
+        //     } else {
+        //         map.setFilter("oikonyms-layer", [
+        //             "==",
+        //             ["slice", ["get", "name"], 0, 1],
+        //             letter
+        //         ]);
+        //     }
+        // });
+
         document.getElementById("letter-filter").addEventListener("input", (e) => {
-            const letter = e.target.value.toLowerCase();
-            if (letter.length === 0) {
-                map.setFilter("oikonyms-layer", null); // сброс фильтра
-            } else {
-                map.setFilter("oikonyms-layer", [
-                    "==",
-                    ["slice", ["get", "name"], 0, 1],
-                    letter
-                ]);
+            const letter = e.target.value.toUpperCase();
+            if (!letter) {
+                map.setFilter("oikonyms-layer", null); // Показать всё
+                return;
             }
+        
+            const idsToShow = allOikonyms
+                .filter(f => {
+                    const parts = f.properties.name.trim().split(/\s+/);
+                    const lastWord = parts[parts.length - 1];
+                    return lastWord[0]?.toUpperCase() === letter;
+                })
+                .map(f => f.id)
+                .filter(id => id !== undefined);
+
+            map.setFilter("oikonyms-layer", ["in", "id", ...idsToShow]);
         });
 })
